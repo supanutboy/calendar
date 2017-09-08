@@ -39,7 +39,7 @@ public class GUIDate extends JFrame {
 	private JComboBox comboBoxYear;
 	private static JComboBox comboBoxDate;
 	private Controller control;
-	private JButton btnChoose;
+	private JButton btnChoose , btnEdit,btnOk;
 	private JTextField chooseDate;
 
 	/**
@@ -110,16 +110,44 @@ public class GUIDate extends JFrame {
 //		contentPane.add(textField);
 //		textField.setColumns(10);
 //		
+		
+		
+
+		textSubject = new JTextField();
+		textSubject.setBounds(510, 66, 211, 26);
+		contentPane.add(textSubject);
+		textSubject.setColumns(10);
+		
+		textArea = new JTextArea();
+		textArea.setBounds(457, 125, 286, 233);
+		contentPane.add(textArea);
+		
 		comboBoxDay = new JComboBox();
 		comboBoxDay.setBounds(489, 42, 85, 21);
 		contentPane.add(comboBoxDay);
 		
 		comboBoxMonth = new JComboBox(getMonth());
+		comboBoxMonth.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int year = Integer.parseInt(comboBoxYear.getSelectedItem().toString());
+				int month = comboBoxMonth.getSelectedIndex();
+				chooseDate.setText(comboBoxMonth.getSelectedItem()+"-"+year);
+				showCalender(year,month);
+			}
+		});
 		comboBoxMonth.setBackground(Color.PINK);
 		comboBoxMonth.setBounds(43, 39, 123, 27);
 		contentPane.add(comboBoxMonth);
 		
 		comboBoxYear = new JComboBox(getYear());
+		comboBoxYear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int year = Integer.parseInt(comboBoxYear.getSelectedItem().toString());
+				int month = comboBoxMonth.getSelectedIndex();
+				chooseDate.setText(comboBoxMonth.getSelectedItem()+"-"+year);
+				showCalender(year,month);
+			}
+		});
 		comboBoxYear.setBounds(178, 39, 123, 27);
 		contentPane.add(comboBoxYear);
 		
@@ -127,6 +155,7 @@ public class GUIDate extends JFrame {
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addDate();
+				textArea.setText("");textSubject.setText("");
 			}
 
 		
@@ -147,7 +176,6 @@ public class GUIDate extends JFrame {
 				int month = comboBoxMonth.getSelectedIndex();
 				chooseDate.setText(comboBoxMonth.getSelectedItem()+"-"+year);
 				showCalender(year,month);
-				
 			}
 		});
 		btnShow.setBounds(320, 37, 117, 29);
@@ -159,9 +187,6 @@ public class GUIDate extends JFrame {
 		contentPane.add(panel);
 		panel.setLayout(new GridLayout(6,7, 0, 0));
 			
-		textArea = new JTextArea();
-		textArea.setBounds(457, 125, 286, 233);
-		contentPane.add(textArea);
 		
 	
 		JLabel lblStep = new JLabel("Step 1:Choose Month&Year");
@@ -188,11 +213,6 @@ public class GUIDate extends JFrame {
 		JLabel lblSubject = new JLabel("Subject");
 		lblSubject.setBounds(457, 71, 61, 16);
 		contentPane.add(lblSubject);
-		
-		textSubject = new JTextField();
-		textSubject.setBounds(510, 66, 211, 26);
-		contentPane.add(textSubject);
-		textSubject.setColumns(10);
 		
 		comboBoxDate = new JComboBox();
 		comboBoxDate.setBounds(168, 411, 490, 16);
@@ -221,9 +241,35 @@ public class GUIDate extends JFrame {
 		contentPane.add(btnRemove);
 		
 		JLabel lblDetail = new JLabel("Detail");
+		
 		lblDetail.setBounds(457, 97, 61, 16);
 		contentPane.add(lblDetail);
 		
+		btnEdit = new JButton("Edit");
+		btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textDate.setBackground(new Color(255, 255, 255));
+				textDate.setEditable(true);
+				btnEdit.setVisible(false);
+				btnOk.setVisible(true);
+			}
+		});
+		btnEdit.setBounds(147, 587, 129, 29);
+		contentPane.add(btnEdit);
+		
+		btnOk = new JButton("OK");
+		btnOk.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnEdit.setVisible(true);
+				btnOk.setVisible(false);
+				textDate.setEditable(false);
+				textDate.setBackground(new Color(255, 245, 238));
+				control.setDate(comboBoxDate.getSelectedItem()+"",textDate.getText());
+			}
+		});
+		btnOk.setBounds(277, 587, 117, 29);
+		btnOk.setVisible(false);
+		contentPane.add(btnOk);
 		for(int i=0;i<textField.length;i++) {
 			textField[i] = new JTextField();
 			textField[i].setEditable(false);
@@ -236,7 +282,7 @@ protected void showCalender(int yearSelect,int monthSelect) {
 		int[] monthDay = {31,28,31,30,31,30,31,31,30,31,30,31};
 		int year=2000;
 		int month=0;
-		int day = 2;
+		int day = 0;
 		while (check(yearSelect,monthSelect,year,month)) {
 		if (month==1 && leapYear(year)) {
 			day=day+29;
@@ -250,9 +296,7 @@ protected void showCalender(int yearSelect,int monthSelect) {
 			year++;
 		}
 		day=day%7;
-		}
-		
-				
+		}	
 		for (int i=0;i<textField.length;i++) {
 			textField[i].setText("");
 		}
@@ -275,17 +319,16 @@ private void updateDay(int lastday) {
 }
 private boolean leapYear(int year) {
 	boolean ans = false;
-	if (year % 4==0) {
+	if (year % 4==0 && year %100 != 0) {
 		ans=true;
-	if (year %100==0) {
-		ans =false;
-		
-	}
+//	if (year %100==0) {
+//		ans =false;	
+//	}
 	if (year %400==0) {
 		ans=true;
 	}
 	}
-	return false;
+	return ans;
 }
 private void addDate() {
 	control.addText(textSubject.getText(),textArea.getText(),comboBoxDay.getSelectedItem()+"",comboBoxMonth.getSelectedItem()+"",comboBoxYear.getSelectedItem()+"");
@@ -325,5 +368,8 @@ private boolean check(int comboBoxYear, int comboBoxMonth, int year, int month) 
 			}
 			
 		}
+	}
+	public JComboBox getComboBoxDate() {
+		return this.comboBoxDate;
 	}
 }

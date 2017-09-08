@@ -1,11 +1,11 @@
 package model;
 
 public class SubMemo {
-	private static String subject;
-	private static String info;
-	private static String day;
-	private static String month;
-	private static String year;
+	private  String subject;
+	private  String info;
+	private  String day;
+	private  String month;
+	private  String year;
 	public SubMemo(String subject,String info,String day,String month,String year) {
 		this.setSubject(subject);
 		this.setDay(day);
@@ -13,31 +13,31 @@ public class SubMemo {
 		this.setYear(year);
 		this.setInfo(info);
 	}
-	public static String getSubject() {
+	public  String getSubject() {
 		return subject;
 	}
 	void setSubject(String subject) {
 		this.subject = subject;
 	}
-	public static String getInfo() {
+	public  String getInfo() {
 		return info;
 	}
-	void setInfo(String info) {
+	public void setInfo(String info) {
 		this.info = info;
 	}
-	public static String getDay() {
+	public  String getDay() {
 		return day;
 	}
 	void setDay(String day) {
 		this.day = day;
 	}
-	public static String getMonth() {
+	public  String getMonth() {
 		return month;
 	}
 	void setMonth(String month) {
 		this.month = month;
 	}
-	public static String getYear() {
+	public  String getYear() {
 		return year;
 	}
 	void setYear(String year) {

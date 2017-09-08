@@ -19,6 +19,7 @@ public class dateTestinListMemo {
 		SubMemo sub =memo.getListDate().get(1);
 		String str= sub.getSubject()+" "+sub.getInfo()+" "+sub.getDay()+" "+sub.getMonth()+" "+sub.getYear();
 		assertEquals(str,"Go to school 12th October 2006,i must to go to school at 8.30 12 October 2006");
+		
 	}
 	
 	
