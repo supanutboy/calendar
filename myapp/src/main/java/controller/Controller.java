@@ -8,6 +8,7 @@ import java.util.Date;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 
+import model.DailyMemo;
 import model.DataBase;
 import model.Memo;
 import model.SubMemo;
@@ -34,10 +35,15 @@ public class Controller {
 	}
 	
 	public void calledDate(String date) {
+		System.out.println(date);
 		//System.out.println(listDate[1]+"   "+listDate[2]+"   "+listDate[3]);
 		String info=memo.getInfo(date);
 	//	System.out.println(info);
 		gui.showDate(info);
+	}
+	public void calledDaily(String date) {
+		String info=memo.showInfoDaily(date);
+		gui.showDateDaily(info);
 	}
 	public void setDate(String date,String infoText ) {
 		memo.setInfo(date, infoText);
@@ -49,6 +55,20 @@ public class Controller {
 		memo.removeMemo(date);
 		gui.showDate(date+" <==== This date has been deleted");
 		gui.deleteComboBoxDate(date);
+	}
+
+	public void addDaily(String subject,String textArea,String day,String month,String year, String daily) {
+		memo.addDaily(subject,textArea,day,month,year,daily);
+		//System.out.println(subject+" "+textArea+" "+day+month+year+daily);
+	}
+
+	public void removeDaily(String string) {
+		memo.removeDaily(string);
+		
+	}
+
+	public void editDaily(String text, String daily) {
+		memo.editDaily(text,daily);
 	}
 
 }
