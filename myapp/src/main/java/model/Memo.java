@@ -4,47 +4,133 @@ import java.util.ArrayList;
 
 
 public class Memo {
-	private static ArrayList<SubMemo> list;
-	//private static ArrayList<DailyMemo> listDaily;
-	private static DailyMemo dailyDay    ;
-	private static DailyMemo dailyMonth ;
-	private static DailyMemo dailyWeek ;
-	private static DataBase db;
-	public   Memo() {
+	private  ArrayList<SubMemo> list;
+	private  DailyMemo dailyDay    ;
+	private  DailyMemo dailyMonth ;
+	private  DailyMemo dailyWeek ;
+	private DataBase db;
+	public   Memo(DataBase db) {
 		list= new ArrayList<SubMemo>();
-		db = new DataBase();
-		dailyDay  = new DailyMemo("","","","","","");
-		dailyMonth = new DailyMemo("","","","","","");
-		dailyWeek = new DailyMemo("","","","","","");
+		this.db = db;
 	}
-	public static void addSub(SubMemo subMemo) {
+	public  void addMemo(SubMemo subMemo) {
 		list.add(subMemo);
 		String str ="'"+subMemo.getSubject()+"','"+subMemo.getInfo()+"','"+subMemo.getDay()+"','"+subMemo.getMonth()+"','"+subMemo.getYear()+"'";
 		db.insertToDB(str);
 	}
-	public static String getInfo(String date) {
-	//	System.out.println(list.size());
+	public  void addMemo(String subject,String info,String day,String month,String year,String daily,String form) {
+		String str  = "";
+		if (daily.equals("Daily")) {
+			dailyDay  = new DailyMemo(subject,info,day,month,year,daily);
+			str ="'"+dailyDay.getSubject()+"','"+dailyDay.getInfo()+"','"+dailyDay.getDay()+"','"+dailyDay.getMonth()+"','"+dailyDay.getYear()+"','Daily'";
+		}
+		else if (daily.equals("Weekly")) {
+			dailyWeek = new DailyMemo(subject,info,day,month,year,daily);
+			str ="'"+dailyWeek.getSubject()+"','"+dailyWeek.getInfo()+"','"+dailyWeek.getDay()+"','"+dailyWeek.getMonth()+"','"+dailyWeek.getYear()+"','Weekly"+form+"'";
+
+		}
+		else if (daily.equals("Monthly")) {
+			dailyMonth = new DailyMemo(subject,info,day,month,year,daily);
+			str ="'"+dailyMonth.getSubject()+"','"+dailyMonth.getInfo()+"','"+dailyMonth.getDay()+"','"+dailyMonth.getMonth()+"','"+dailyMonth.getYear()+"','Monthly"+form+"'";
+		}
+		db.insertDailyDataBase(str,daily);
+	}
+	public  String getInfo(String date) {
 		for (SubMemo subMemo:list) {
-			String str = subMemo.getYear()+"-"+subMemo.getMonth()+"-"+subMemo.getDay();
-		//	System.out.println(str);
+			String str = subMemo.getYear()+"-"+subMemo.getMonth()+"-"+subMemo.getDay();		
 			if (str.equals(date)) {
+				if (!dailyDay.getInfo().equals(null)) {
 				return subMemo.getInfo();
+				}
 			}
 		}
-		return "Hello";	
+		return "---Empty---";	
 	}
-	public static void chngeDaily(DailyMemo obj,String daily) {
+	public String getinfoDaily(String dayButton, ArrayList<String> listSun, ArrayList<String> listMon,
+			ArrayList<String> listTue, ArrayList<String> listWed, ArrayList<String> listThu, ArrayList<String> listFri,
+			ArrayList<String> listSat) {
+		String str ="";
+	//	try {
+		String[] dayMonth= dailyMonth.getDaily().split("Monthly");
+		String[] dayWeek = dailyWeek.getDaily().split("Weekly");
+		ArrayList<String> arr = new ArrayList<String>();
+		try {
+		if (!dailyDay.getInfo().equals(null)) {
+			 str=str+"------Daily-----\n"+dailyDay.getInfo()+"\n---------------\n";
+			}
+		}catch(Exception e) {
+			str="";
+		}
+		try {
+		if (dayButton.equals(dayMonth[1])) {
+			str=str+"---Every "+dayButton+" of Month---\n"+dailyMonth.getInfo()+"\n------------\n";
+		}
+		}catch(Exception e) {
+			str="";
+		}
+		try {
+		if (dayWeek[1].equals("Sun")) {
+			arr=listSun;
+		}
+		if (dayWeek[1].equals("Mon")) {
+			arr=listMon;
+			}
+		if (dayWeek[1].equals("Tue")) {
+			arr=listTue;
+			}
+		if (dayWeek[1].equals("Thu")) {
+			arr =listThu;
+			}
+		if (dayWeek[1].equals("Wed")) {
+			arr= listWed;
+			}
+		if (dayWeek[1].equals("Fri")) {
+			arr =listFri;
+			}
+		if (dayWeek[1].equals("Sat")) {
+			arr= listSat;
+			}
+		for (String a:arr) {
+			if (a.equals(dayButton)) {
+				str=str+"---Every "+a+" of Weekly---\n"+dailyWeek.getInfo()+"\n------------\n";
+			}
+		}
+		}catch(Exception e) {
+			str="";
+		}
+		return str;
+	}
+	public  String showInfoDaily(String daily) {
+		String information ="";
+		String[] dayMonth= dailyMonth.getDaily().split("Monthly");
+		String[] dayWeek = dailyWeek.getDaily().split("Weekly");
+		try {
+		if (daily.equals("Daily")) {
+			information = dailyDay.getInfo();
+		}
+		else if (daily.equals("Weekly")) {
+			information ="---Every "+dayWeek[1]+"---\n"+dailyWeek.getInfo();
+		}
+		else if (daily.equals("Monthly")) {
+			information  ="---Every "+dayMonth[1]+"---\n"+dailyMonth.getInfo();
+		}}
+		finally {
+			return information;
+		}
+	}
+	public  void chngeDaily(DailyMemo obj,String daily) {
 		if (daily.equals("Daily")) {
 			dailyDay = obj;
 		}
-		else if (daily.equals("Weekly")) {
+		else if (daily.contains("Weekly")) {
 			dailyWeek = obj;
 		}
-		else if (daily.equals("Monthly")) {
+		else if (daily.contains("Monthly")) {
 			dailyMonth= obj;	
+
 		}
 	}
-	public static void setInfo(String date,String info) {
+	public  void setInfo(String date,String info) {
 		for (SubMemo subMemo:list) {
 			String str ="Subject:"+subMemo.getSubject()+"->"+subMemo.getYear()+"-"+subMemo.getMonth()+"-"+subMemo.getDay();
 			if (str.equals(date)) {
@@ -55,40 +141,7 @@ public class Memo {
 			}
 		}
 	}
-	public static String showInfoDaily(String daily) {
-		String information ="";
-		if (daily.equals("Daily")) {
-			information = dailyDay.getInfo();
-		}
-		else if (daily.equals("Weekly")) {
-			information =dailyWeek.getInfo();
-		}
-		else if (daily.equals("Monthly")) {
-			information  =dailyMonth.getInfo();
-		}
-			return information;
-	}
-	public static void addDaily(String subject,String info,String day,String month,String year,String daily) {
-		String str  = "";
-		if (daily.equals("Daily")) {
-			dailyDay.newSet(subject,info,day,month,year,daily);
-			str ="'"+dailyDay.getSubject()+"','"+dailyDay.getInfo()+"','"+dailyDay.getDay()+"','"+dailyDay.getMonth()+"','"+dailyDay.getYear()+"','Daily'";
-			//System.out.println(str);
-		}
-		else if (daily.equals("Weekly")) {
-			dailyWeek.newSet(subject,info,day,month,year,daily);
-			str ="'"+dailyWeek.getSubject()+"','"+dailyWeek.getInfo()+"','"+dailyWeek.getDay()+"','"+dailyWeek.getMonth()+"','"+dailyWeek.getYear()+"','Weekly'";
-
-		}
-		else if (daily.equals("Monthly")) {
-			dailyMonth.newSet(subject,info,day,month,year,daily);
-			str ="'"+dailyMonth.getSubject()+"','"+dailyMonth.getInfo()+"','"+dailyMonth.getDay()+"','"+dailyMonth.getMonth()+"','"+dailyMonth.getYear()+"','Monthly'";
-
-		}
-		db.insertDailyDataBase(str,daily);
-	}
-	
-	public static void removeMemo(String date) {
+	public  void removeMemo(String date) {
 		for (int i=0;i<list.size();i++) {
 			String str ="Subject:"+list.get(i).getSubject()+"->"+list.get(i).getYear()+"-"+list.get(i).getMonth()+"-"+list.get(i).getDay();
 			String quer ="delete from EventCalender where Subject = '" +list.get(i).getSubject()+"' and Detail = '"+list.get(i).getInfo()+"' and Day = '"+list.get(i).getDay()+ "' and Month = '"+list.get(i).getMonth()+"' and Year = '"+list.get(i).getYear()+"' ;" ;
@@ -98,29 +151,21 @@ public class Memo {
 			}
 		}
 	}
-	static ArrayList<SubMemo> getList() {
-		return list;
-	}
-	static void setList(ArrayList<SubMemo> list) {
-		Memo.list = list;
-	}
-	public static ArrayList<SubMemo> getListDate() {
-		return list;
-	}
-	public static void removeDaily(String daily) {
+
+	public  void removeDaily(String daily) {
 		if (daily.equals("Daily")) {
-			dailyDay.newSet("","","","","","");
+			dailyDay=null;
 		}
 		else if (daily.equals("Weekly")) {
-			dailyWeek.newSet("","","","","","");
+			dailyWeek=null;
 		}
 		else if (daily.equals("Monthly")) {
-			dailyMonth.newSet("","","","","","");	
+			dailyMonth=null;
 		}
 		db.removeDailyDataBase(daily);
 		
 	}
-	public static void editDaily(String text, String daily) {
+	public  void editDaily(String text, String daily) {
 		if (daily.equals("Daily")) {
 			dailyDay.setInfo(text);
 		}
@@ -137,5 +182,15 @@ public class Memo {
 		
 		
 	}
+	public  ArrayList<SubMemo> getList() {
+		return list;
+	}
+	public  void setList(ArrayList<SubMemo> list) {
+		this.list = list;
+	}
+	public  ArrayList<SubMemo> getListDate() {
+		return list;
+	}
+	
 	
 }

@@ -11,7 +11,7 @@ public class EditDateMemo {
 
 	@Test
 	public void test() {
-		Memo memo =new Memo();
+		Memo memo =new Memo(null);
 		SubMemo sub1 = new SubMemo("Go to shopping","25th July 2006,i go to shopping", "25", "july", "2006");
 		SubMemo sub2 = new SubMemo("Go to school","12th October 2006,i must to go to school at 8.30","12","October","2006");
 		sub1.setInfo("Hello");

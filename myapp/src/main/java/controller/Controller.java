@@ -13,32 +13,33 @@ import model.DataBase;
 import model.Memo;
 import model.SubMemo;
 import viewAndAction.GUIDate;
-import viewAndAction.View;
 
 public class Controller {
-	Memo memo;
-//	SubMemo subMemo;
-	GUIDate gui;
-	DataBase db;
+	private  Memo memo ;
+	private GUIDate gui;
+	private DataBase db;
 	public void startApplication() {
-		Date currentDate = new Date();
-		memo = new Memo();
-		gui =new GUIDate();
+		gui =new GUIDate(this);
 		db = new DataBase();
-		gui.starFrame();
-		db.StartDataBase(memo,gui);
-		
+		this.memo = new Memo(db);	
+	//	gui.starFrame();
+		db.StartDataBase(memo);
+		setGUI();
 	}
-
+	public void setGUI() {
+		for (SubMemo sub :memo.getListDate()) {
+				gui.getComboBoxDate().addItem("Subject:"+sub.getSubject()+"->"+sub.getYear()+"-"+sub.getMonth()+"-"+sub.getDay()+"");
+		}
+	}
 	public void addText(String subject,String textArea,String day,String month,String year) {//getDay Year Month  นำมาใส่เพื่อผันทึกค่า อย่าลืมคิดเคสที่เดือนวันปีเดียวกัน
-		memo.addSub(new SubMemo(subject,textArea,day,month,year));
+		SubMemo submemo= new SubMemo(subject,textArea,day,month,year);
+		memo.addMemo(submemo);
 	}
-	
+	public void addText(String subject,String textArea,String day,String month,String year, String daily,String form) {
+		memo.addMemo(subject,textArea,day,month,year,daily,form);
+	}
 	public void calledDate(String date) {
-		System.out.println(date);
-		//System.out.println(listDate[1]+"   "+listDate[2]+"   "+listDate[3]);
 		String info=memo.getInfo(date);
-	//	System.out.println(info);
 		gui.showDate(info);
 	}
 	public void calledDaily(String date) {
@@ -50,25 +51,25 @@ public class Controller {
 		String info=memo.getInfo(date);
 		gui.showDate(info);
 	}
-
 	public void removeDate(String date) {
 		memo.removeMemo(date);
 		gui.showDate(date+" <==== This date has been deleted");
 		gui.deleteComboBoxDate(date);
 	}
 
-	public void addDaily(String subject,String textArea,String day,String month,String year, String daily) {
-		memo.addDaily(subject,textArea,day,month,year,daily);
-		//System.out.println(subject+" "+textArea+" "+day+month+year+daily);
-	}
-
 	public void removeDaily(String string) {
 		memo.removeDaily(string);
-		
 	}
 
 	public void editDaily(String text, String daily) {
 		memo.editDaily(text,daily);
+	}
+	public void calledDailyArea(String dayButton, ArrayList<String> listSun, ArrayList<String> listMon,
+			ArrayList<String> listTue, ArrayList<String> listWed, ArrayList<String> listThu, ArrayList<String> listFri,
+			ArrayList<String> listSat) {
+		String str=memo.getinfoDaily(dayButton,listSun,listMon,listTue,listWed,listThu,listFri,listSat);
+		gui.showDateDailyArea(str);
+		
 	}
 
 }

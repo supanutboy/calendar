@@ -9,9 +9,13 @@ import java.sql.Statement;
 import viewAndAction.GUIDate;
 
 public class DataBase {
-
-	public  void StartDataBase(Memo memo,GUIDate gui) {
+	private Memo memo;
+	public DataBase() {
+	
+	}
+	public  void StartDataBase(Memo memo) {
 		try {
+			this.memo=memo;
 			Class.forName("org.sqlite.JDBC");
 			String dbURL = "jdbc:sqlite:Supanut.db";
 			Connection conn =DriverManager.getConnection(dbURL);
@@ -22,10 +26,10 @@ public class DataBase {
 				while(result.next()) {
 					String form =result.getString(6)+"";
 					if (form.equals("null")) {
-					memo.getListDate().add(new SubMemo(result.getString(1),result.getString(2),result.getString(3),result.getString(4),result.getString(5)));
-					gui.getComboBoxDate().addItem("Subject:"+result.getString(1)+"->"+result.getString(5)+"-"+result.getString(4)+"-"+result.getString(3)+"");
+					this.memo.getListDate().add(new SubMemo(result.getString(1),result.getString(2),result.getString(3),result.getString(4),result.getString(5)));
+				//	gui.getComboBoxDate().addItem("Subject:"+result.getString(1)+"->"+result.getString(5)+"-"+result.getString(4)+"-"+result.getString(3)+"");
 					}else {
-					memo.chngeDaily(new DailyMemo(result.getString(1),result.getString(2),result.getString(3),result.getString(4),result.getString(5),result.getString(6)),result.getString(6));
+					this.memo.chngeDaily(new DailyMemo(result.getString(1),result.getString(2),result.getString(3),result.getString(4),result.getString(5),result.getString(6)),result.getString(6));
 					}
 				}
 //				conn.close();

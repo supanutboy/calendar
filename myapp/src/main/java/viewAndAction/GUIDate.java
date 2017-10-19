@@ -30,40 +30,35 @@ import java.awt.Color;
 import javax.swing.JRadioButton;
 
 public class GUIDate extends JFrame {
-	private Memo memo;
-	private static JTextArea textArea,textDate,textAreaDaily;
+	//private Memo memo;
+	private JTextArea textArea,textDate,textAreaDaily,textDateDaily;
 	private JPanel contentPane;
-	JComboBox comboBoxDay,comboBoxDaily;
-	//private JTextField textField;
+	private Controller control;
 	private JTextField[] textField = new JTextField[42];
 	private JButton[] btnDay= new JButton[42];
-	//private static JTextField textDate;
 	private JTextField textSubject;
-	private JComboBox comboBoxMonth;
+	private JComboBox comboBoxMonth,boxDayforWeekly,boxForMonthly,comboBoxYear,comboBoxDate,comboBoxDay,comboBoxDaily;
 	private JRadioButton rdbtnDay,rdbtnWeekly,rdbtnMonthly;
-	private JComboBox comboBoxYear;
-	private static JComboBox comboBoxDate;
-	private Controller control;
 	private JButton btnChoose , btnEdit,btnOk,btnOkDaily,btnEditDaily,day;
 	private JTextField chooseDate;
 	private ButtonGroup group;
 	private ArrayList<String > listMon,listSun,listTue,listWed,listThu,listFri,listSat;
-	/**
-	 * Launch the application.
-	 */
-	public  void starFrame() {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					GUIDate frame = new GUIDate();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-	public GUIDate() {
+	private String checklist;
+	private JTextField textField_1;
+//	public  void starFrame() {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					GUIDate frame = new GUIDate();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
+	public GUIDate(Controller co) {
+		this.control=co;
 		listMon = new ArrayList<String>();
 		listSun = new ArrayList<String>();
 		listTue = new ArrayList<String>();
@@ -72,8 +67,7 @@ public class GUIDate extends JFrame {
 		listFri = new ArrayList<String>();
 		listSat = new ArrayList<String>();
 		setBackground(Color.PINK);
-		memo=new Memo();
-		control = new Controller();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(140, 450,876, 683);
 		contentPane = new JPanel();
@@ -118,13 +112,6 @@ public class GUIDate extends JFrame {
 		lblMemo.setBounds(298, 11, 103, 16);
 		contentPane.add(lblMemo);
 		
-		//textField = new JTextField();
-//		textField.setBounds(444, 81, 186, 225);
-//		contentPane.add(textField);
-//		textField.setColumns(10);
-//		
-		
-		
 
 		textSubject = new JTextField();
 		textSubject.setBounds(510, 66, 211, 26);
@@ -138,6 +125,14 @@ public class GUIDate extends JFrame {
 		comboBoxDay = new JComboBox();
 		comboBoxDay.setBounds(489, 42, 85, 21);
 		contentPane.add(comboBoxDay);
+		
+		 boxForMonthly = new JComboBox();
+		boxForMonthly.setBounds(631, 407, 79, 26);
+		for (int i=1;i<31;i++) {
+		boxForMonthly.addItem(i);
+		}
+		boxForMonthly.setVisible(false);
+		contentPane.add(boxForMonthly);
 		
 		comboBoxMonth = new JComboBox(getMonth());
 		comboBoxMonth.addActionListener(new ActionListener() {
@@ -177,26 +172,15 @@ public class GUIDate extends JFrame {
 		contentPane.add(btnSave);
 		
 		chooseDate = new JTextField();
+		chooseDate.setBackground(new Color(255, 204, 204));
 		chooseDate.setBounds(576, 38, 151, 26);
 		chooseDate.setEditable(false);
 		contentPane.add(chooseDate);
 		chooseDate.setColumns(10);
 		
-//		JButton btnShow = new JButton("SHOW");
-//		btnShow.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				int year = Integer.parseInt(comboBoxYear.getSelectedItem().toString());
-//				int month = comboBoxMonth.getSelectedIndex();
-//				chooseDate.setText(comboBoxMonth.getSelectedItem()+"-"+year);
-//				showCalender(year,month);
-//			}
-//		});
-//		btnShow.setBounds(320, 37, 117, 29);
-//		contentPane.add(btnShow);
-		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(250, 240, 230));
-		panel.setBounds(30, 105, 403, 256);
+		panel.setBounds(30, 106, 403, 256);
 		contentPane.add(panel);
 		panel.setLayout(new GridLayout(6,7, 0, 0));
 			
@@ -212,16 +196,12 @@ public class GUIDate extends JFrame {
 		
 		textDate = new JTextArea();
 		textDate.setBackground(new Color(255, 245, 238));
-		textDate.setBounds(43, 462, 339, 144);
+		textDate.setBounds(6, 457, 202, 154);
 		textDate.setEditable(false);
 		contentPane.add(textDate);
-		
+		JLabel noeltest = new JLabel("Noel");
+		textDate.add(noeltest);
 		textDate.setColumns(10);
-		
-		JLabel lblTodolist = new JLabel("To-do-list    date : ");
-		lblTodolist.setBackground(new Color(255, 250, 205));
-		lblTodolist.setBounds(43, 411, 165, 16);
-		contentPane.add(lblTodolist);
 		
 		JLabel lblSubject = new JLabel("Subject");
 		lblSubject.setBounds(457, 71, 61, 16);
@@ -232,13 +212,19 @@ public class GUIDate extends JFrame {
 		contentPane.add(comboBoxDate);
 		
 		JLabel lblStepchooseDate = new JLabel("Step3:Choose date ");
-		lblStepchooseDate.setBounds(43, 383, 123, 16);
+		lblStepchooseDate.setBounds(43, 411, 123, 16);
 		contentPane.add(lblStepchooseDate);
 		
 		btnChoose = new JButton("Choose");
 		btnChoose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				control.calledDate(comboBoxDate.getSelectedItem()+"");
+				String box =comboBoxDate.getSelectedItem()+"";
+				if (!box.equals(null)) {
+				String[] cutSubject =box.split("->");
+				String[] arr =cutSubject[1].split("-");
+				control.calledDate(cutSubject[1]);
+				//control.calledDailyArea(arr[2],boxForMonthly.getSelectedItem()+"",chooseDay());
+				}
 			}
 		});
 		btnChoose.setBounds(424, 406, 89, 29);
@@ -291,32 +277,58 @@ public class GUIDate extends JFrame {
 		textAreaDaily.setBounds(438, 467, 364, 154);
 		contentPane.add(textAreaDaily);
 		
-		JLabel lblDailyMemo = new JLabel("To do-list for \n");
-		lblDailyMemo.setBounds(434, 436, 103, 26);
+		JLabel lblDailyMemo = new JLabel("To do-list for Show & Edit\n");
+		lblDailyMemo.setBounds(434, 436, 168, 26);
 		contentPane.add(lblDailyMemo);
 		
 		JLabel lblMemoTopic = new JLabel("Memo Topic");
-		lblMemoTopic.setBounds(43, 434, 89, 31);
+		lblMemoTopic.setBounds(6, 434, 89, 31);
 		contentPane.add(lblMemoTopic);
 		
 		
 		JButton btnAddToDaily = new JButton("Add to Daily");
 		btnAddToDaily.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				control.addDaily(textSubject.getText(),textArea.getText(),comboBoxDay.getSelectedItem()+"",comboBoxMonth.getSelectedItem()+"",comboBoxYear.getSelectedItem()+"",comboBoxDaily.getSelectedItem()+"");
-				//comboBoxDate.addItem("Subject:"+textSubject.getText()+"->"+comboBoxYear.getSelectedItem()+"-"+comboBoxMonth.getSelectedItem()+"-"+comboBoxDay.getSelectedItem()+"");
+				if (comboBoxDaily.getSelectedItem().equals("Weekly")) {
+				control.addText(textSubject.getText(),textArea.getText(),comboBoxDay.getSelectedItem()+"",comboBoxMonth.getSelectedItem()+"",comboBoxYear.getSelectedItem()+"",comboBoxDaily.getSelectedItem()+"",boxDayforWeekly.getSelectedItem()+"");
+				}
+				else if (comboBoxDaily.getSelectedItem().equals("Monthly")) {
+				control.addText(textSubject.getText(),textArea.getText(),comboBoxDay.getSelectedItem()+"",comboBoxMonth.getSelectedItem()+"",comboBoxYear.getSelectedItem()+"",comboBoxDaily.getSelectedItem()+"",boxForMonthly.getSelectedItem()+"");
+				}
+				else if (comboBoxDaily.getSelectedItem().equals("Daily")) {
+					control.addText(textSubject.getText(),textArea.getText(),comboBoxDay.getSelectedItem()+"",comboBoxMonth.getSelectedItem()+"",comboBoxYear.getSelectedItem()+"",comboBoxDaily.getSelectedItem()+"","");
+					}
 				textSubject.setText("");
 				textArea.setText("");
+				
 			}
 		});
 		btnAddToDaily.setBounds(718, 370, 129, 29);
 		contentPane.add(btnAddToDaily);
 		
 		comboBoxDaily = new JComboBox();
-		comboBoxDaily.setBounds(587, 371, 123, 27);
 		comboBoxDaily.addItem("Daily");
 		comboBoxDaily.addItem("Weekly");
 		comboBoxDaily.addItem("Monthly");
+		comboBoxDaily.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (comboBoxDaily.getSelectedItem().equals("Daily")) {
+					boxDayforWeekly.setVisible(false);
+					boxForMonthly.setVisible(false);
+				}
+				if (comboBoxDaily.getSelectedItem().equals("Weekly")) {
+					boxDayforWeekly.setVisible(true);
+					boxForMonthly.setVisible(false);
+					
+				}
+				if (comboBoxDaily.getSelectedItem().equals("Monthly")) {
+					boxForMonthly.setVisible(true);
+					boxDayforWeekly.setVisible(false);
+				}
+			}
+		});
+		comboBoxDaily.setBounds(587, 371, 123, 27);
+
 		contentPane.add(comboBoxDaily);
 		
 		JLabel label = new JLabel("|\n");
@@ -369,7 +381,7 @@ public class GUIDate extends JFrame {
 				control.calledDaily("Daily");
 			}
 		});
-		rdbtnDay.setBounds(527, 437, 77, 23);
+		rdbtnDay.setBounds(606, 437, 77, 23);
 		contentPane.add(rdbtnDay);
 		
 		rdbtnWeekly = new JRadioButton("Weekly");
@@ -378,7 +390,7 @@ public class GUIDate extends JFrame {
 				control.calledDaily("Weekly");
 			}
 		});
-		rdbtnWeekly.setBounds(597, 437, 89, 23);
+		rdbtnWeekly.setBounds(674, 437, 89, 23);
 		contentPane.add(rdbtnWeekly);
 		
 		rdbtnMonthly = new JRadioButton("Monthly");
@@ -387,7 +399,7 @@ public class GUIDate extends JFrame {
 				control.calledDaily("Monthly");
 			}
 		});
-		rdbtnMonthly.setBounds(679, 437, 91, 23);
+		rdbtnMonthly.setBounds(756, 437, 91, 23);
 		contentPane.add(rdbtnMonthly);
 		group = new ButtonGroup();
 		group.add(rdbtnMonthly);group.add(rdbtnWeekly);group.add(rdbtnDay);
@@ -454,30 +466,77 @@ public class GUIDate extends JFrame {
 		btnEditDaily.setBounds(566, 626, 117, 29);
 		contentPane.add(btnEditDaily);
 		
-	//	for(int i=0;i<textField.length;i++) { `						##
-			
-//			textField[i] = new JTextField();
-//			textField[i].setEditable(false);
-//			textField[i].setHorizontalAlignment(JTextField.CENTER);
-	//		panel.add(textField[i]);									##
-		//}
+		textDateDaily = new JTextArea();
+		textDateDaily.setEditable(false);
+		textDateDaily.setColumns(10);
+		textDateDaily.setBackground(new Color(255, 245, 238));
+		textDateDaily.setBounds(214, 457, 189, 154);
+		contentPane.add(textDateDaily);
+		
+		JLabel lblDailyMemo_1 = new JLabel("Daily Memo");
+		lblDailyMemo_1.setBounds(220, 441, 75, 16);
+		contentPane.add(lblDailyMemo_1);
+		
+		boxDayforWeekly = new JComboBox();
+		boxDayforWeekly.setBounds(522, 407, 89, 26);
+		boxDayforWeekly.addItem("Sun");
+		boxDayforWeekly.addItem("Mon");
+		boxDayforWeekly.addItem("Tue");
+		boxDayforWeekly.addItem("Wed");
+		boxDayforWeekly.addItem("Thu");
+		boxDayforWeekly.addItem("Fri");
+		boxDayforWeekly.addItem("Sat");
+		boxDayforWeekly.setVisible(false);
+		contentPane.add(boxDayforWeekly);
+		
+//		JLabel lblSearch = new JLabel("Search");
+//		lblSearch.setBounds(6, 386, 61, 16);
+//		contentPane.add(lblSearch);
+//		
+//		textField_1 = new JTextField();
+//		textField_1.setBounds(61, 381, 75, 26);
+//		contentPane.add(textField_1);
+//		textField_1.setColumns(10);
 		
 		for (int i=0;i<btnDay.length;i++) {
 			final JButton dayB = new JButton();
 			dayB.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					textArea.setText("");textSubject.setText("");
-			//		System.out.println(dayB.getText());
-					
-				//	control.addText(textSubject.getText(),textArea.getText(),dayB.getName()+"",comboBoxMonth.getSelectedItem()+"",comboBoxYear.getSelectedItem()+"");
-				//	comboBoxDate.addItem("Subject:"+textSubject.getText()+"->"+comboBoxYear.getSelectedItem()+"-"+comboBoxMonth.getSelectedItem()+"-"+dayB.getName()+"");
 					control.calledDate(comboBoxYear.getSelectedItem()+"-"+comboBoxMonth.getSelectedItem()+"-"+dayB.getText()+"");
+					control.calledDailyArea(dayB.getText(),listSun,listMon,listTue,listWed,listThu,listFri,listSat);
+					comboBoxDay.setSelectedIndex(Integer.parseInt(dayB.getText()+"")-1);
 				}
 			});
 			btnDay[i] = dayB;
 			panel.add(dayB);
 		}	
+		setVisible(true);
 	}
+	
+public ArrayList<String> chooseDay(){
+	if (checklist.equals("Sun")) {
+	return listSun;
+	}
+	if (checklist.equals("Mon")) {
+		return listMon;
+		}
+	if (checklist.equals("Tue")) {
+		return listTue;
+		}
+	if (checklist.equals("Thu")) {
+		return listThu;
+		}
+	if (checklist.equals("Wed")) {
+		return listWed;
+		}
+	if (checklist.equals("Fri")) {
+		return listFri;
+		}
+	else {
+		return listSat;
+		}
+}
 public String checkDay (String day) {
 	String dailyDay ="";
 	if (listMon.contains(day)) {
@@ -505,6 +564,13 @@ public String checkDay (String day) {
 }
 	
 protected void showCalender(int yearSelect,int monthSelect) {
+		listSun.clear();
+		listMon.clear();
+		listTue.clear();
+		listThu.clear();
+		listWed.clear();
+		listSat.clear();
+		listFri.clear();
 		int[] monthDay = {31,28,31,30,31,30,31,31,30,31,30,31};
 		int year=2000;
 		int month=0;
@@ -532,33 +598,37 @@ protected void showCalender(int yearSelect,int monthSelect) {
 		}
 		this.updateDay(lastValue);
 		int count=0;
+		int c=1;
 		for (int i=1,j=day;i<=lastValue;i++,j++) {
-			if (count%7==0) {
-				listSun.add(i+"");
+			if (j%7==0) {
+				listSun.add(c+"");
+				c=c+1;
 			}
-			else if (count%7==1) {
-				listMon.add(i+"");
+			else if (j%7==1) {
+				listMon.add(c+"");
+				c=c+1;
 			}
-			else if (count%7==2) {
-				listTue.add(i+"");
+			else if (j%7==2) {
+				listTue.add(c+"");
+				c=c+1;
 			}
-			else if (count%7==3) {
-				listWed.add(i+"");
+			else if (j%7==3) {
+				listWed.add(c+"");
+				c=c+1;
 			}
-			else if (count%7==4) {
-				listTue.add(i+"");
+			else if (j%7==4) {
+				listThu.add(c+"");
+				c=c+1;
 			}
-			else if (count%7==5) {
-				listFri.add(i+"");
+			else if (j%7==5) {
+				listFri.add(c+"");
+				c=c+1;
 			}
-			else if (count%7==6) {
-				listSat.add(i+"");
+			else if (j%7==6) {
+				listSat.add(c+"");
+				c=c+1;
 			}
-//			for (String q: listMon) {
-//				System.out.println(q);
-//			}
 			btnDay[j].setText(String.valueOf(i));
-		//	System.out.println(btnDay[j].getText());
 			count=count+1;
 		}
 		
@@ -583,7 +653,6 @@ private boolean leapYear(int year) {
 private void addDate() {
 	control.addText(textSubject.getText(),textArea.getText(),comboBoxDay.getSelectedItem()+"",comboBoxMonth.getSelectedItem()+"",comboBoxYear.getSelectedItem()+"");
 	comboBoxDate.addItem("Subject:"+textSubject.getText()+"->"+comboBoxYear.getSelectedItem()+"-"+comboBoxMonth.getSelectedItem()+"-"+comboBoxDay.getSelectedItem()+"");
-	
 }
 private boolean check(int comboBoxYear, int comboBoxMonth, int year, int month) {
 	if (comboBoxYear==year && comboBoxMonth==month) {
@@ -606,10 +675,13 @@ private boolean check(int comboBoxYear, int comboBoxMonth, int year, int month) 
 		String[] str = {"January","Febryary","Match","April","May","June","July","August","September","October","November","December"};
 		return str;
 	}
-	public static  void showDate(String info) {
+	public   void showDate(String info) {
 		textDate.setText(info);
 	}
-	public static void deleteComboBoxDate(String date) {
+	public  void showDateDailyArea(String info) {
+		textDateDaily.setText(info);
+	}
+	public  void deleteComboBoxDate(String date) {
 		for (int i=0 ;i<comboBoxDate.getItemCount();i++) {
 			String str =comboBoxDate.getItemAt(i)+"";
 			if ((str).equals(date)) {
@@ -621,7 +693,8 @@ private boolean check(int comboBoxYear, int comboBoxMonth, int year, int month) 
 	public JComboBox getComboBoxDate() {
 		return this.comboBoxDate;
 	}
-	public static void showDateDaily(String info) {
+	
+	public  void showDateDaily(String info) {
 		textAreaDaily.setText(info);
 	}
 	public static void showTextButton() {
