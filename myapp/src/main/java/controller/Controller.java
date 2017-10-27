@@ -8,19 +8,26 @@ import java.util.Date;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+
 import model.DailyMemo;
 import model.DataBase;
 import model.Memo;
 import model.SubMemo;
 import viewAndAction.GUIDate;
-
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class Controller {
 	private  Memo memo ;
 	private GUIDate gui;
 	private DataBase db;
 	public void startApplication() {
 		gui =new GUIDate(this);
-		db = new DataBase();
+		//db = new DataBase();
+		ApplicationContext bf =new ClassPathXmlApplicationContext("database.xml");
+		db = (DataBase) bf.getBean("database");
 		this.memo = new Memo(db);	
 	//	gui.starFrame();
 		db.StartDataBase(memo);

@@ -28,6 +28,7 @@ import java.awt.TextArea;
 import javax.swing.JTextArea;
 import java.awt.Color;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 
 public class GUIDate extends JFrame {
 	//private Memo memo;
@@ -285,7 +286,7 @@ public class GUIDate extends JFrame {
 		lblMemoTopic.setBounds(6, 434, 89, 31);
 		contentPane.add(lblMemoTopic);
 		
-		
+
 		JButton btnAddToDaily = new JButton("Add to Daily");
 		btnAddToDaily.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
