@@ -9,6 +9,9 @@ import javax.swing.border.EmptyBorder;
 
 import org.omg.CORBA.portable.ValueOutputStream;
 
+import common.CalenderService;
+import common.Client;
+import common.StartClient;
 import controller.Controller;
 import model.Memo;
 
@@ -34,7 +37,7 @@ public class GUIDate extends JFrame {
 	//private Memo memo;
 	private JTextArea textArea,textDate,textAreaDaily,textDateDaily;
 	private JPanel contentPane;
-	private Controller control;
+	private Client control;
 	private JTextField[] textField = new JTextField[42];
 	private JButton[] btnDay= new JButton[42];
 	private JTextField textSubject;
@@ -58,8 +61,9 @@ public class GUIDate extends JFrame {
 //			}
 //		});
 //	}
-	public GUIDate(Controller co) {
+	public GUIDate(Client co) {
 		this.control=co;
+//		CalenderService service = new CalenderService();
 		listMon = new ArrayList<String>();
 		listSun = new ArrayList<String>();
 		listTue = new ArrayList<String>();

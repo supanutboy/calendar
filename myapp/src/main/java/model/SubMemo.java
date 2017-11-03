@@ -1,6 +1,8 @@
 package model;
 
-public class SubMemo extends ReminderMemo {
+import java.io.Serializable;
+
+public class SubMemo extends ReminderMemo  {
 	private  String subject;
 	private  String info;
 	private  String day;

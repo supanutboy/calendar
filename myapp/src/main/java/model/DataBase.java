@@ -27,7 +27,6 @@ public class DataBase {
 					String form =result.getString(6)+"";
 					if (form.equals("null")) {
 					this.memo.getListDate().add(new SubMemo(result.getString(1),result.getString(2),result.getString(3),result.getString(4),result.getString(5)));
-				//	gui.getComboBoxDate().addItem("Subject:"+result.getString(1)+"->"+result.getString(5)+"-"+result.getString(4)+"-"+result.getString(3)+"");
 					}else {
 					this.memo.chngeDaily(new DailyMemo(result.getString(1),result.getString(2),result.getString(3),result.getString(4),result.getString(5),result.getString(6)),result.getString(6));
 					}

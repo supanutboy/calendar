@@ -1,6 +1,8 @@
 package model;
 
-public class ReminderMemo {
+import java.io.Serializable;
+
+public class ReminderMemo implements Serializable {
 	private  String subject;
 	private  String info;
 	private  String day;

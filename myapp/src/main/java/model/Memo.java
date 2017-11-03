@@ -9,6 +9,7 @@ public class Memo {
 	private  DailyMemo dailyMonth ;
 	private  DailyMemo dailyWeek ;
 	private DataBase db;
+	int checkDB=0;
 	public   Memo(DataBase db) {
 		list= new ArrayList<SubMemo>();
 		this.db = db;
